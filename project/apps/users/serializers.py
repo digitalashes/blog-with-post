@@ -56,6 +56,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
+class VerifyEmailResendSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True,
+                                   help_text=_('Email, which was specified during registration'))
+
+    def validate_email(self, email):
+        email = get_adapter().clean_email(email)
+        if email and not email_address_exists(email):
+            raise serializers.ValidationError(_('A user with this e-mail address is not registered.'))
+        return email
+
+    def save(self, request):
+        email_address = EmailAddress.objects.get(email__iexact=self.validated_data.get('email'))
+        email_address.send_confirmation(request)
+
+
 class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -88,17 +103,3 @@ class PasswordResetSerializer(PasswordResetSerializerBase):
                 'request': self.context.get('request'),
             }
         }
-
-
-class VerifyEmailResendSerializer(serializers.Serializer):
-    email = serializers.EmailField(help_text=_('Email.'))
-
-    def validate_email(self, email):
-        email = get_adapter().clean_email(email)
-        if email and not email_address_exists(email):
-            raise serializers.ValidationError(_('A user with this e-mail address is not registered.'))
-        return email
-
-    def save(self, request):
-        email_address = EmailAddress.objects.get(email__iexact=self.validated_data.get('email'))
-        email_address.send_confirmation(request)

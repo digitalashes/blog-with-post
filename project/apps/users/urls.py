@@ -1,15 +1,25 @@
 from django.urls import path, include
-from rest_framework_jwt.views import (
-    obtain_jwt_token,
-    refresh_jwt_token,
-    verify_jwt_token,
-)
+
 from users import views
 
 urlpatterns = [
     path('auth/', include((
         [
-            path('registration/', views.registration, name='registration'),
+            path(
+                'registration/',
+                views.registration,
+                name='registration'
+            ),
+            path(
+                'verify_email_resend/',
+                views.verify_email_resend,
+                name='verify_email_resend'
+            ),
+            path(
+                'verify_email_confirm/',
+                views.verify_email_confirm,
+                name='verify_email_confirm'
+            ),
 
             # path('login/', obtain_jwt_token, name='login'),
             # path('logout/', views.logout, name='logout'),
