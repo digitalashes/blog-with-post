@@ -1,0 +1,7 @@
+---
+
+- name: Install Project Requirements
+  pip:
+    requirements: "{{ requirements_file }}"
+    executable: "{{ virtualenv_path }}/bin/pip"
+  tags: pip

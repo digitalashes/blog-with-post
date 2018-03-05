@@ -1,0 +1,29 @@
+---
+
+project_name: blog_with_post
+application_name: blog_with_post
+
+# Database settings.
+db_name: "blog"
+db_user: "vagrant"
+db_password: "vagrant"
+
+# Application settings.
+virtualenv_path: "/home/vagrant/venv"
+project_path: "/vagrant"
+requirements_file: "{{ project_path }}/requirements/local.txt"
+django_settings_path: "{{ project_path }}/config"
+django_settings: "config.settings"
+
+# Python version
+python_version: 3.6
+
+# PostgreSQL version
+postgres_version: 9.6
+
+# Services
+postgis_install: false
+memcached_install: false
+rabbitmq_install: false
+redis_install: false
+elasticsearch_install: false
