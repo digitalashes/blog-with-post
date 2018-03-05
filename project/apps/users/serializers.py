@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.serializers import (
+    LoginSerializer as LoginSerializerBase,
     PasswordResetSerializer as PasswordResetSerializerBase,
 )
 from rest_framework import serializers
@@ -71,18 +72,13 @@ class VerifyEmailResendSerializer(serializers.Serializer):
         email_address.send_confirmation(request)
 
 
-class UserSimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'email',)
-        read_only_fields = ('id', 'email',)
-
-
-class UserDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'first_name', 'last_name',)
-        read_only_fields = ('id', 'email',)
+class LoginSerializer(LoginSerializerBase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.pop('email')
+        self.fields['username'].required = True
+        self.fields['username'].help_text = _('Username.')
+        self.fields['password'].help_text = _('Password.')
 
 
 class PasswordResetSerializer(PasswordResetSerializerBase):
@@ -103,3 +99,10 @@ class PasswordResetSerializer(PasswordResetSerializerBase):
                 'request': self.context.get('request'),
             }
         }
+
+
+class UserDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name', 'avatar_url')
+        read_only_fields = ('id', 'email', 'avatar_url')

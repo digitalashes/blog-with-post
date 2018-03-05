@@ -1,15 +1,18 @@
 from django.contrib.auth import logout as auth_logout
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.registration.views import RegisterView as RegisterViewBase
 from rest_auth.registration.views import VerifyEmailView as VerifyEmailViewBase
+from rest_auth.views import LoginView as LoginViewBase
 from rest_auth.views import PasswordChangeView as BasePasswordChangeView
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
+from rest_framework_jwt.serializers import (
+    jwt_payload_handler,
+    jwt_encode_handler,
+)
 
 from users.serializers import (
     VerifyEmailResendSerializer)
@@ -67,29 +70,26 @@ class VerifyEmailConfirmApiView(VerifyEmailViewBase):
         return Response({'token': token, 'user': payload}, status=status.HTTP_200_OK)
 
 
-class LogoutApiView(APIView):
+class LoginApiView(LoginViewBase):
     """
-    Calls Django logout method and delete the Token object
-    assigned to the current User object.
-
-    Accepts/Returns nothing.
+    post: Return auth token and user data.
 
     """
 
     http_method_names = ('post', 'head', 'options')
-    permission_classes = (AllowAny,)
+
+
+class LogoutApiView(APIView):
+    """
+    post: Calls Django logout method and delete the Token object assigned to the current User object.
+
+    """
+
+    http_method_names = ('post', 'head', 'options')
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        return self.logout(request)
-
-    def logout(self, request):
-        try:
-            request.user.auth_token.delete()
-        except (AttributeError, ObjectDoesNotExist):
-            pass
-
         auth_logout(request)
-
         return Response({'detail': _('Successfully logged out.')}, status=status.HTTP_200_OK)
 
 
@@ -110,6 +110,7 @@ registration = RegisterApiView.as_view()
 verify_email_resend = VerifyEmailResendApiView.as_view()
 verify_email_confirm = VerifyEmailConfirmApiView.as_view()
 
+login = LoginApiView.as_view()
 logout = LogoutApiView.as_view()
 
 password_change = PasswordChangeApiView.as_view()

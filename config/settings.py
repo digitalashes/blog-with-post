@@ -455,13 +455,13 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = env.int('ALLAUTH_LOGIN_ATTEMPTS_TIMEOUT')
 
 REST_AUTH_SERIALIZERS = {
     # rest_auth.views.LoginView
-    'LOGIN_SERIALIZER': 'rest_auth.serializers.LoginSerializer',
+    'LOGIN_SERIALIZER': 'users.serializers.LoginSerializer',
     # rest_auth.views.LoginView
     'TOKEN_SERIALIZER': 'rest_auth.serializers.TokenSerializer',
     # rest_auth.views.LoginView
     'JWT_SERIALIZER': 'rest_auth.serializers.JWTSerializer',
     # rest_auth.views.UserDetailsView
-    'USER_DETAILS_SERIALIZER': 'rest_auth.serializers.UserDetailsSerializer',
+    'USER_DETAILS_SERIALIZER': 'users.serializers.UserDetailsSerializer',
     # rest_auth.views.PasswordResetView
     'PASSWORD_RESET_SERIALIZER': 'rest_auth.serializers.PasswordResetSerializer',
     # rest_auth.serializers.PasswordResetConfirmSerializer
@@ -549,7 +549,7 @@ JWT_AUTH = {
         datetime.timedelta(seconds=env.int('JWT_EXPIRATION_DELTA')),
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
-    'JWT_ALLOW_REFRESH': False,
+    'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA':
         datetime.timedelta(seconds=env.int('JWT_REFRESH_EXPIRATION_DELTA')),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
