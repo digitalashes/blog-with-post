@@ -1,9 +1,11 @@
 import os
 
+from allauth.utils import build_absolute_uri
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import SoftDeletableModel
@@ -99,3 +101,8 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
         if commit:
             self.save()
         return self, password
+
+    @property
+    def avatar_url(self):
+        url = self.avatar.url if self.avatar else static('/images/default_user_avatar.png')
+        return build_absolute_uri(None, url)
