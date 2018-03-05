@@ -11,6 +11,8 @@ from rest_auth.serializers import (
 )
 from rest_framework import serializers
 
+from users.forms import PasswordResetForm
+
 User = get_user_model()
 
 
@@ -82,12 +84,7 @@ class LoginSerializer(LoginSerializerBase):
 
 
 class PasswordResetSerializer(PasswordResetSerializerBase):
-
-    def validate_email(self, email):
-        email = super().validate_email(email)
-        if email and not email_address_exists(email):
-            raise serializers.ValidationError(_('A user with this e-mail address is not registered.'))
-        return email
+    password_reset_form_class = PasswordResetForm
 
     def get_email_options(self):
         tpl = 'account/email/%s'

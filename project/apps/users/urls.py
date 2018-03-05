@@ -11,6 +11,7 @@ urlpatterns = [
                 views.registration,
                 name='registration',
             ),
+
             path(
                 'verify_email_resend/',
                 views.verify_email_resend,
@@ -44,7 +45,21 @@ urlpatterns = [
                 name='token_verify',
             ),
 
-            # path('password_change/', views.password_change, name='password_change'),
+            path(
+                'password_change/',
+                views.password_change,
+                name='password_change',
+            ),
+            path(
+                'password_reset/',
+                views.password_reset,
+                name='password_reset',
+            ),
+            path(
+                'password_reset_confirm/',
+                views.password_reset_confirm,
+                name='password_reset_confirm',
+            ),
 
         ], 'users'), namespace='auth')),
     path('users/', include((

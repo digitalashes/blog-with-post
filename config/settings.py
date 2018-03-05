@@ -463,7 +463,7 @@ REST_AUTH_SERIALIZERS = {
     # rest_auth.views.UserDetailsView
     'USER_DETAILS_SERIALIZER': 'users.serializers.UserDetailsSerializer',
     # rest_auth.views.PasswordResetView
-    'PASSWORD_RESET_SERIALIZER': 'rest_auth.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'users.serializers.PasswordResetSerializer',
     # rest_auth.serializers.PasswordResetConfirmSerializer
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'rest_auth.serializers.PasswordResetConfirmSerializer',
     # rest_auth.views.PasswordChangeView
@@ -673,5 +673,5 @@ CLIENT_DOMAIN = urlunparse((DEFAULT_HTTP_PROTOCOL, env.str('CLIENT_DOMAIN'), '',
 
 WEB_URLS = {
     'email_confirm': '{root_url}/account-confirm-email/{key}/',
-    'reset_password': '{root_url}/reset/{uid}/{token}/',
+    'reset_password': '{root_url}/reset-password/?uid={uid}&token={token}/',
 }

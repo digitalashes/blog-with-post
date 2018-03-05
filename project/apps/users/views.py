@@ -1,9 +1,13 @@
 from django.contrib.auth import logout as auth_logout
 from django.utils.translation import ugettext_lazy as _
-from rest_auth.registration.views import RegisterView as RegisterViewBase
-from rest_auth.registration.views import VerifyEmailView as VerifyEmailViewBase
-from rest_auth.views import LoginView as LoginViewBase
-from rest_auth.views import PasswordChangeView as BasePasswordChangeView
+from rest_auth.registration.views import RegisterView as BaseRegisterView
+from rest_auth.registration.views import VerifyEmailView as BaseVerifyEmailView
+from rest_auth.views import LoginView as BaseLoginView
+from rest_auth.views import (
+    PasswordChangeView as BasePasswordChangeView,
+    PasswordResetView as BasePasswordResetView,
+    PasswordResetConfirmView as BasePasswordResetConfirmView
+)
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -15,10 +19,11 @@ from rest_framework_jwt.serializers import (
 )
 
 from users.serializers import (
-    VerifyEmailResendSerializer)
+    VerifyEmailResendSerializer,
+)
 
 
-class RegisterApiView(RegisterViewBase):
+class RegisterApiView(BaseRegisterView):
     """
     post: Create new user instance.
 
@@ -27,7 +32,7 @@ class RegisterApiView(RegisterViewBase):
     http_method_names = ('post', 'head', 'options')
 
 
-class VerifyEmailResendApiView(generics.CreateAPIView):
+class VerifyEmailResendApiView(generics.GenericAPIView):
     """
     post: Resend email verification letter.
 
@@ -37,7 +42,7 @@ class VerifyEmailResendApiView(generics.CreateAPIView):
     http_method_names = ('post', 'head', 'options')
     permission_classes = (AllowAny,)
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(self.request)
@@ -47,7 +52,7 @@ class VerifyEmailResendApiView(generics.CreateAPIView):
         )
 
 
-class VerifyEmailConfirmApiView(VerifyEmailViewBase):
+class VerifyEmailConfirmApiView(BaseVerifyEmailView):
     """
     post: Verify email if valid secret key given.
 
@@ -70,7 +75,7 @@ class VerifyEmailConfirmApiView(VerifyEmailViewBase):
         return Response({'token': token, 'user': payload}, status=status.HTTP_200_OK)
 
 
-class LoginApiView(LoginViewBase):
+class LoginApiView(BaseLoginView):
     """
     post: Return auth token and user data.
 
@@ -97,16 +102,42 @@ class PasswordChangeApiView(BasePasswordChangeView):
     """
     Calls Django Auth SetPasswordForm save method.
 
-    Accepts the following POST parameters: old_password, new_password1, new_password2
+    Accepts the following POST parameters: new_password1, new_password2
     Returns the success/fail message.
 
     """
 
     http_method_names = ('post', 'head', 'options')
-    permission_classes = (IsAuthenticated,)
+
+
+class PasswordResetView(BasePasswordResetView):
+    """
+    Calls Django Auth PasswordResetForm save method.
+
+    Accepts the following POST parameters: email
+    Returns the success/fail message.
+
+    """
+
+    http_method_names = ('post', 'head', 'options')
+
+
+class PasswordResetConfirmView(BasePasswordResetConfirmView):
+    """
+    Password reset e-mail link is confirmed, therefore
+    this resets the user's password.
+
+    Accepts the following POST parameters: token, uid,
+        new_password1, new_password2
+    Returns the success/fail message.
+
+    """
+
+    http_method_names = ('post', 'head', 'options')
 
 
 registration = RegisterApiView.as_view()
+
 verify_email_resend = VerifyEmailResendApiView.as_view()
 verify_email_confirm = VerifyEmailConfirmApiView.as_view()
 
@@ -114,3 +145,5 @@ login = LoginApiView.as_view()
 logout = LogoutApiView.as_view()
 
 password_change = PasswordChangeApiView.as_view()
+password_reset = PasswordResetView.as_view()
+password_reset_confirm = PasswordResetConfirmView.as_view()
