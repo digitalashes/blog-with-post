@@ -106,7 +106,6 @@ SITE_ID = 1
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#database
 ##############################################################################
-
 DATABASES = {
     'default': env.db('DJANGO_DATABASE_URL')
 }
@@ -143,7 +142,6 @@ THIRD_PARTY_APPS = (
     'django_extensions',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
     'rest_auth',
     'rest_auth.registration',
     'rest_framework',
@@ -416,15 +414,15 @@ ACCOUNT_USER_DISPLAY = 'user.full_name'
 
 ACCOUNT_EMAIL_REQUIRED = True
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 
 ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
 

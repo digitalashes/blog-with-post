@@ -5,8 +5,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import UserChangeForm as UserChangeFormBase
 from django.contrib.auth.forms import UserCreationForm as UserCreationFormBase
+from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
 
+from common.utils import get_object_or_none
+
+admin.site.unregister(Group)
 User = get_user_model()
 
 
@@ -24,20 +28,34 @@ class UserChangeForm(UserChangeFormBase):
 
 class UserCreationForm(UserCreationFormBase):
     error_message = UserCreationFormBase.error_messages.update({
-        'duplicate_email': 'This email has already been taken.'
+        'duplicate_username': 'This username has already been taken.',
+        'duplicate_email': 'This email has already been taken.',
     })
 
     class Meta(UserCreationFormBase.Meta):
         model = User
-        fields = ('email',)
+        fields = ('username', 'email')
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        obj = get_object_or_none(User, username=username)
+        if obj:
+            raise forms.ValidationError(self.error_messages.get('duplicate_username'))
+        return username
 
     def clean_email(self):
-        email = self.cleaned_data['email']
-        try:
-            User.objects.get(email=email)
-        except User.DoesNotExist:
-            return email
-        raise forms.ValidationError(self.error_messages['duplicate_email'])
+        email = self.cleaned_data.get('email')
+        obj = get_object_or_none(User, email=email)
+        if obj:
+            raise forms.ValidationError(self.error_messages.get('duplicate_email'))
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        EmailAddress.objects.create(user=user,
+                                    email=user.email,
+                                    primary=True)
+        return user
 
 
 @admin.register(User)
@@ -45,23 +63,29 @@ class UserAdmin(AuthUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
     inlines = (EmailAddressStackedInline,)
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'is_active', 'last_login', 'date_joined')
+    list_display = ('username', 'email', 'first_name', 'last_name',
+                    'is_staff', 'is_active', 'last_login', 'date_joined')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
-    ordering = ('email',)
+    ordering = ('username', 'email')
     readonly_fields = ('last_login', 'date_joined')
-    search_fields = ('first_name', 'last_name', 'email')
+    search_fields = ('username', 'first_name', 'last_name', 'email')
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'first_name', 'last_name', 'password1', 'password2'),
+            'fields': ('username', 'email', 'first_name', 'last_name',
+                       'password1', 'password2'),
         }),
     )
 
     fieldsets = (
         (None, {
             'fields': (
-                'email', 'first_name', 'last_name', 'password', 'last_login', 'date_joined')
+                'username', 'email',
+                'first_name', 'last_name',
+                'avatar',
+                'password', 'last_login', 'date_joined'
+            )
         }),
         (_('Permissions'), {
             'classes': ('collapse',),

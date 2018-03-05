@@ -1,27 +1,51 @@
+import os
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from model_utils.models import SoftDeletableModel
 
 from users.managers import UserManager
 
 
-class User(PermissionsMixin, AbstractBaseUser):
+def get_user_avatar_upload_path(instance, filename):
+    return os.path.join(*('users', str(instance.pk), filename))
+
+
+class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     """
     Common user model.
 
     """
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
-    username = None
+    username_validator = UnicodeUsernameValidator()
 
+    username = models.CharField(
+        _('Username'),
+        max_length=150, unique=True, validators=[username_validator],
+        error_messages={
+            'unique': _('A user with that username already exists.'),
+        },
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+
+    )
     email = models.EmailField(
         _('Email address'), unique=True, help_text=_('Email address.')
     )
+    avatar = models.ImageField(
+        _('Avatar'), width_field=250, height_field=250,
+        upload_to=get_user_avatar_upload_path, blank=True, null=True,
+        help_text=_('Avatar.')
+    )
     password = models.CharField(
-        _('Password'), max_length=128, help_text=_('Password.'))
+        _('Password'), max_length=128, help_text=_('Password.')
+    )
     first_name = models.CharField(
         _('First Name'), max_length=128, help_text=_('First name.')
     )
@@ -42,14 +66,15 @@ class User(PermissionsMixin, AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
     class Meta:
         verbose_name = _('User')
         verbose_name_plural = _('Users')
         ordering = ('last_name', 'first_name', 'email')
         indexes = (
-            models.Index(fields=['email', 'last_name', 'first_name']),
+            models.Index(fields=['username', 'email',
+                                 'last_name', 'first_name']),
         )
 
     @property
