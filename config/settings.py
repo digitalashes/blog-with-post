@@ -1,6 +1,7 @@
 import datetime
 import secrets
 import sys
+from urllib.parse import urlunparse
 
 import environ
 import raven
@@ -69,10 +70,7 @@ env = environ.Env(
     DJANGO_USE_SILK=(bool, False),
     DJANGO_SENTRY_DSN=(str, ''),
 
-    CELERY_ALWAYS_EAGER=(bool, False),
-    CELERY_RESULT_BACKEND=(str, 'django-db'),
-    CELERY_BROKER_URL=(str, 'amqp://'),
-    CELERY_IGNORE_RESULT=(bool, True),
+    CLIENT_DOMAIN=(str, 'localhost:8000'),
 )
 
 environ.Env.read_env()
@@ -404,7 +402,7 @@ CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST')
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ##############################################################################
 
-ACCOUNT_ADAPTER = 'allauth.account.adapter.DefaultAccountAdapter'
+ACCOUNT_ADAPTER = 'users.adapter.AccountAdapter'
 
 SOCIALACCOUNT_ADAPTER = 'allauth.socialaccount.adapter.DefaultSocialAccountAdapter'
 
@@ -417,6 +415,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+
+UNIQUE_EMAIL = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
@@ -472,7 +472,7 @@ REST_AUTH_SERIALIZERS = {
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     # rest_auth.registration.views.RegisterView
-    'REGISTER_SERIALIZER': 'rest_auth.registration.serializers.RegisterSerializer'
+    'REGISTER_SERIALIZER': 'users.serializers.RegisterSerializer'
 }
 
 REST_AUTH_TOKEN_MODEL = 'rest_framework.authtoken.models'
@@ -535,7 +535,7 @@ JWT_AUTH = {
         'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
 
     'JWT_RESPONSE_PAYLOAD_HANDLER':
-        'project.apps.users.jwt.jwt_response_payload_handler',
+        'rest_framework_jwt.utils.jwt_response_payload_handler',
 
     'JWT_SECRET_KEY': env.str('JWT_SECRET_KEY'),
     'JWT_GET_USER_SECRET_KEY': None,
@@ -668,3 +668,10 @@ if env('DJANGO_SENTRY_DSN'):
 # Project settings
 #
 ##############################################################################
+
+CLIENT_DOMAIN = urlunparse((DEFAULT_HTTP_PROTOCOL, env.str('CLIENT_DOMAIN'), '', '', '', ''))
+
+WEB_URLS = {
+    'email_confirm': '{root_url}/account-confirm-email/{key}/',
+    'reset_password': '{root_url}/reset/{uid}/{token}/',
+}

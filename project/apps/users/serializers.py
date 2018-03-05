@@ -1,44 +1,34 @@
-from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
 from allauth.account.models import EmailAddress
 from allauth.account.utils import setup_user_email
 from allauth.utils import email_address_exists
 from django.conf import settings
-from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.serializers import (
     PasswordResetSerializer as PasswordResetSerializerBase,
 )
-from rest_framework import exceptions
 from rest_framework import serializers
 
 User = get_user_model()
 
 
-class UserSimpleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'email',)
-        read_only_fields = ('id', 'email',)
-
-
-class UserDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'user_type', 'email', 'first_name', 'last_name',)
-        read_only_fields = ('id', 'email',)
-
-
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password', 'first_name', 'last_name',)
+        fields = ('username', 'email', 'password', 'first_name', 'last_name', 'avatar')
+
+    def validate_username(self, username):
+        username = get_adapter().clean_username(username)
+        return username
 
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
-        if email and email_address_exists(email):
-            raise serializers.ValidationError(_('A user is already registered with this e-mail address.'))
+        if settings.UNIQUE_EMAIL:
+            if email and email_address_exists(email):
+                raise serializers.ValidationError(
+                    _('A user is already registered with this e-mail address.')
+                )
         return email
 
     def validate_password(self, password):
@@ -46,10 +36,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def get_cleaned_data(self):
         return {
-            'password1': self.validated_data.get('password', ''),
             'email': self.validated_data.get('email', ''),
+            'username': self.validated_data.get('username', ''),
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', ''),
+            'password1': self.validated_data.get('password', ''),
         }
 
     def custom_signup(self, request, user):
@@ -65,31 +56,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True, allow_blank=True, help_text=_('Email.'))
-    password = serializers.CharField(style={'input_type': 'password'}, help_text=_('Password.'))
+class UserSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email',)
+        read_only_fields = ('id', 'email',)
 
-    def validate(self, attrs):
-        attrs = super().validate(attrs)
 
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        user = authenticate(email=email, password=password)
-
-        if user:
-            if not user.is_active:
-                raise exceptions.ValidationError(_('User account is disabled.'))
-        else:
-            raise exceptions.ValidationError(_('Unable to log in with provided credentials.'))
-
-        if settings.EMAIL_VERIFICATION == app_settings.EmailVerificationMethod.MANDATORY:
-            email_address = user.emailaddress_set.get(email=user.email)
-            if not email_address.verified:
-                raise serializers.ValidationError(_('E-mail is not verified.'))
-
-        attrs['user'] = user
-        return attrs
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name',)
+        read_only_fields = ('id', 'email',)
 
 
 class PasswordResetSerializer(PasswordResetSerializerBase):

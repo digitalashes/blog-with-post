@@ -1,16 +1,12 @@
-
 from django.contrib.auth import logout as auth_logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
-from rest_auth.app_settings import create_token
 from rest_auth.registration.views import RegisterView as RegisterViewBase
 from rest_auth.views import PasswordChangeView as BasePasswordChangeView
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from users.jwt import jwt_response_payload_handler
 
 
 class RegisterApiView(RegisterViewBase):
@@ -20,12 +16,6 @@ class RegisterApiView(RegisterViewBase):
     """
 
     http_method_names = ('post', 'head', 'options')
-    permission_classes = (AllowAny,)
-
-    def get_response_data(self, user):
-        token = create_token(user)
-        data = jwt_response_payload_handler(token, user)
-        return data
 
 
 class LogoutApiView(APIView):

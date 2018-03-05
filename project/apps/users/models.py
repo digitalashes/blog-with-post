@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -36,7 +37,8 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
 
     )
     email = models.EmailField(
-        _('Email address'), unique=True, help_text=_('Email address.')
+        _('Email address'), unique=settings.UNIQUE_EMAIL,
+        help_text=_('Email address.')
     )
     avatar = models.ImageField(
         _('Avatar'), width_field=250, height_field=250,
