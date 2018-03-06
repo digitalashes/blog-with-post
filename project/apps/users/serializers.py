@@ -101,7 +101,8 @@ class PasswordResetSerializer(PasswordResetSerializerBase):
 class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username')
+        fields = ('id', 'username', 'avatar_url',
+                  'first_name', 'last_name',)
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
