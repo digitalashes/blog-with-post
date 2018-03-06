@@ -10,7 +10,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import SoftDeletableModel
 
-from users.managers import UserManager
+from users.managers import UserManager, WithDeleteUserManager
 
 
 def get_user_avatar_upload_path(instance, filename):
@@ -40,21 +40,24 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     )
     email = models.EmailField(
         _('Email address'), unique=settings.UNIQUE_EMAIL,
-        help_text=_('Email address.')
+        help_text=_('User Email Address.')
     )
     avatar = models.ImageField(
         _('Avatar'), width_field=250, height_field=250,
         upload_to=get_user_avatar_upload_path, blank=True, null=True,
-        help_text=_('Avatar.')
+        help_text=_('User Avatar.')
     )
     password = models.CharField(
-        _('Password'), max_length=128, help_text=_('Password.')
+        _('Password'), max_length=128,
+        help_text=_('User Password.')
     )
     first_name = models.CharField(
-        _('First Name'), max_length=128, help_text=_('First name.')
+        _('First Name'), max_length=128,
+        help_text=_('User First Name.')
     )
     last_name = models.CharField(
-        _('Last Name'), max_length=128, help_text=_('Last name.')
+        _('Last Name'), max_length=128,
+        help_text=_('User Last name.')
     )
     date_joined = models.DateTimeField(
         _('Member since'), auto_now_add=True
@@ -68,9 +71,7 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     )
 
     objects = UserManager()
-
-    def __str__(self):
-        return self.username
+    with_delete = WithDeleteUserManager()
 
     class Meta:
         verbose_name = _('User')
@@ -80,6 +81,9 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
             models.Index(fields=['username', 'email',
                                  'last_name', 'first_name']),
         )
+
+    def __str__(self):
+        return self.username
 
     @property
     def primary_email(self):
