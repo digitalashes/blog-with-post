@@ -4,9 +4,11 @@ import sys
 from urllib.parse import urlunparse
 
 import environ
+import markdown
 import raven
 from django.conf.global_settings import LANGUAGES as BASE_LANGUAGES
 from django.contrib import messages
+from docutils.core import publish_parts
 from model_utils import Choices
 
 from .logging import LOGGING
@@ -148,6 +150,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'common.apps.CommonConfig',
+    'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
 )
 
@@ -663,6 +666,22 @@ if env('DJANGO_SENTRY_DSN'):
             'propagate': False,
         }
     })
+
+
+##############################################################################
+# Django Markup Field
+# https://github.com/jamesturk/django-markupfield#django-markupfield
+##############################################################################
+
+def render_rest(markup):
+    parts = publish_parts(source=markup, writer_name='html4css1')
+    return parts['fragment']
+
+
+MARKUP_FIELD_TYPES = (
+    ('markdown', markdown.markdown),
+    ('ReST', render_rest),
+)
 
 ##############################################################################
 # Project settings
