@@ -98,6 +98,12 @@ class PasswordResetSerializer(PasswordResetSerializerBase):
         }
 
 
+class UserSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
+
 class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
