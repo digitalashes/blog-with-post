@@ -1,4 +1,4 @@
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout, get_user_model
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.registration.views import RegisterView as BaseRegisterView
 from rest_auth.registration.views import VerifyEmailView as BaseVerifyEmailView
@@ -18,9 +18,17 @@ from rest_framework_jwt.serializers import (
     jwt_encode_handler,
 )
 
+from users.filters import (
+    UsersSearchFilter,
+    UsersOrderingFilter,
+)
 from users.serializers import (
     VerifyEmailResendSerializer,
+    UserDetailsSerializer,
+    UserUpdateSerializer,
 )
+
+User = get_user_model()
 
 
 class RegisterApiView(BaseRegisterView):
@@ -136,6 +144,47 @@ class PasswordResetConfirmView(BasePasswordResetConfirmView):
     http_method_names = ('post', 'head', 'options')
 
 
+class UserListApiView(generics.ListAPIView):
+    """
+    get: List of users
+
+    """
+
+    queryset = User.objects.only('id', 'email', 'first_name', 'last_name', 'avatar')
+    http_method_names = ('get', 'head', 'options')
+    filter_backends = (UsersSearchFilter, UsersOrderingFilter)
+    search_fields = ('email', 'first_name', 'last_name')
+    serializer_class = UserDetailsSerializer
+    permission_classes = (AllowAny,)
+
+
+class UserInfoApiView(generics.RetrieveAPIView):
+    """
+    get: Return user info
+
+    """
+
+    queryset = User.objects.only('id', 'email', 'first_name', 'last_name', 'avatar')
+    http_method_names = ('get', 'head', 'options')
+    serializer_class = UserDetailsSerializer
+    permission_classes = (AllowAny,)
+    lookup_url_kwarg = 'pk'
+
+
+class UserUpdateApiView(generics.UpdateAPIView):
+    """
+    patch: Update user info
+
+    """
+
+    http_method_names = ('patch', 'head', 'options')
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserUpdateSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
 registration = RegisterApiView.as_view()
 
 verify_email_resend = VerifyEmailResendApiView.as_view()
@@ -147,3 +196,7 @@ logout = LogoutApiView.as_view()
 password_change = PasswordChangeApiView.as_view()
 password_reset = PasswordResetView.as_view()
 password_reset_confirm = PasswordResetConfirmView.as_view()
+
+user_list = UserListApiView.as_view()
+user_info = UserInfoApiView.as_view()
+user_update = UserUpdateApiView.as_view()

@@ -101,5 +101,46 @@ class PasswordResetSerializer(PasswordResetSerializerBase):
 class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'avatar_url')
-        read_only_fields = ('id', 'email', 'avatar_url')
+        fields = ('id', 'username', 'email',
+                  'first_name', 'last_name',
+                  'avatar_url', 'last_login')
+        read_only_fields = ('id', 'avatar_url', 'last_login')
+
+    def to_representation(self, instance):
+        """
+        If content not present in the serializer,
+        then it's new user and all data should be returns.
+        Otherwise, check request user and queryset user and
+        if them not the equals each other, remove fields with sensitive info
+        from the response.
+
+        """
+
+        representation = super().to_representation(instance)
+        if self.context:
+            request_user = self.context.get('request').user
+            if instance != request_user:
+                representation.pop('email', None)
+        return representation
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'avatar',
+                  'first_name', 'last_name')
+
+    def update(self, instance, validated_data):
+        email = validated_data.get('email')
+        if email and email != instance.email:
+            instance.emailaddress_set.filter(user=instance).update(primary=False)
+            email_address, created = instance.emailaddress_set.update_or_create(user=instance,
+                                                                                email=email,
+                                                                                primary=True)
+            if created or not email_address.verified:
+                email_address.send_confirmation()
+
+        return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        return UserDetailsSerializer(instance).data

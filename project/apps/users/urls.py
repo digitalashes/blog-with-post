@@ -64,6 +64,20 @@ urlpatterns = [
         ], 'users'), namespace='auth')),
     path('users/', include((
         [
-
+            path(
+                'user_list/',
+                views.user_list,
+                name='user_list',
+            ),
+            path(
+                'user_info/<int:pk>/',
+                views.user_info,
+                name='user_info',
+            ),
+            path(
+                'user_update/',
+                views.user_update,
+                name='user_update',
+            ),
         ], 'users'), namespace='users')),
 ]
