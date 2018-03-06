@@ -1,6 +1,7 @@
 import datetime
 import secrets
 import sys
+from urllib.parse import urlunparse
 
 import environ
 import raven
@@ -69,10 +70,7 @@ env = environ.Env(
     DJANGO_USE_SILK=(bool, False),
     DJANGO_SENTRY_DSN=(str, ''),
 
-    CELERY_ALWAYS_EAGER=(bool, False),
-    CELERY_RESULT_BACKEND=(str, 'django-db'),
-    CELERY_BROKER_URL=(str, 'amqp://'),
-    CELERY_IGNORE_RESULT=(bool, True),
+    CLIENT_DOMAIN=(str, 'localhost:8000'),
 )
 
 environ.Env.read_env()
@@ -106,7 +104,6 @@ SITE_ID = 1
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#database
 ##############################################################################
-
 DATABASES = {
     'default': env.db('DJANGO_DATABASE_URL')
 }
@@ -143,7 +140,6 @@ THIRD_PARTY_APPS = (
     'django_extensions',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
     'rest_auth',
     'rest_auth.registration',
     'rest_framework',
@@ -406,7 +402,7 @@ CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST')
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ##############################################################################
 
-ACCOUNT_ADAPTER = 'allauth.account.adapter.DefaultAccountAdapter'
+ACCOUNT_ADAPTER = 'users.adapter.AccountAdapter'
 
 SOCIALACCOUNT_ADAPTER = 'allauth.socialaccount.adapter.DefaultSocialAccountAdapter'
 
@@ -416,15 +412,17 @@ ACCOUNT_USER_DISPLAY = 'user.full_name'
 
 ACCOUNT_EMAIL_REQUIRED = True
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
+UNIQUE_EMAIL = True
+
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 
 ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
 
@@ -457,15 +455,15 @@ ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = env.int('ALLAUTH_LOGIN_ATTEMPTS_TIMEOUT')
 
 REST_AUTH_SERIALIZERS = {
     # rest_auth.views.LoginView
-    'LOGIN_SERIALIZER': 'rest_auth.serializers.LoginSerializer',
+    'LOGIN_SERIALIZER': 'users.serializers.LoginSerializer',
     # rest_auth.views.LoginView
     'TOKEN_SERIALIZER': 'rest_auth.serializers.TokenSerializer',
     # rest_auth.views.LoginView
     'JWT_SERIALIZER': 'rest_auth.serializers.JWTSerializer',
     # rest_auth.views.UserDetailsView
-    'USER_DETAILS_SERIALIZER': 'rest_auth.serializers.UserDetailsSerializer',
+    'USER_DETAILS_SERIALIZER': 'users.serializers.UserDetailsSerializer',
     # rest_auth.views.PasswordResetView
-    'PASSWORD_RESET_SERIALIZER': 'rest_auth.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'users.serializers.PasswordResetSerializer',
     # rest_auth.serializers.PasswordResetConfirmSerializer
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'rest_auth.serializers.PasswordResetConfirmSerializer',
     # rest_auth.views.PasswordChangeView
@@ -474,7 +472,7 @@ REST_AUTH_SERIALIZERS = {
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     # rest_auth.registration.views.RegisterView
-    'REGISTER_SERIALIZER': 'rest_auth.registration.serializers.RegisterSerializer'
+    'REGISTER_SERIALIZER': 'users.serializers.RegisterSerializer'
 }
 
 REST_AUTH_TOKEN_MODEL = 'rest_framework.authtoken.models'
@@ -509,7 +507,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': 'rest_framework.permissions.AllowAny',
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.PageNumberPagination',
     'PAGE_SIZE': 25,
     'EXCEPTION_HANDLER': 'common.exceptions.exception_handler',
 }
@@ -537,7 +535,7 @@ JWT_AUTH = {
         'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
 
     'JWT_RESPONSE_PAYLOAD_HANDLER':
-        'project.apps.users.jwt.jwt_response_payload_handler',
+        'rest_framework_jwt.utils.jwt_response_payload_handler',
 
     'JWT_SECRET_KEY': env.str('JWT_SECRET_KEY'),
     'JWT_GET_USER_SECRET_KEY': None,
@@ -551,7 +549,7 @@ JWT_AUTH = {
         datetime.timedelta(seconds=env.int('JWT_EXPIRATION_DELTA')),
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
-    'JWT_ALLOW_REFRESH': False,
+    'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA':
         datetime.timedelta(seconds=env.int('JWT_REFRESH_EXPIRATION_DELTA')),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
@@ -670,3 +668,10 @@ if env('DJANGO_SENTRY_DSN'):
 # Project settings
 #
 ##############################################################################
+
+CLIENT_DOMAIN = urlunparse((DEFAULT_HTTP_PROTOCOL, env.str('CLIENT_DOMAIN'), '', '', '', ''))
+
+WEB_URLS = {
+    'email_confirm': '{root_url}/account-confirm-email/{key}/',
+    'reset_password': '{root_url}/reset-password/?uid={uid}&token={token}/',
+}
