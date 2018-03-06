@@ -1,7 +1,17 @@
 from django.contrib.auth.base_user import BaseUserManager
+from django.db.models import QuerySet, Manager
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import SoftDeletableManager
+
+
+class WithDeleteUserQuerySet(QuerySet):
+    pass
+
+
+class WithDeleteUserManager(Manager):
+    def get_queryset(self):
+        return WithDeleteUserQuerySet(self.model, using=self._db)
 
 
 class UserManager(BaseUserManager, SoftDeletableManager):

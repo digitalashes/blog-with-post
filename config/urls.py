@@ -8,6 +8,7 @@ from config.api_docs import docs
 
 api_urlpatterns = [
     path('', include('users.urls')),
+    path('', include('posts.urls')),
 ]
 
 urlpatterns = [
