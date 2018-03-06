@@ -556,7 +556,7 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA':
         datetime.timedelta(seconds=env.int('JWT_REFRESH_EXPIRATION_DELTA')),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
-    'JWT_AUTH_COOKIE': None,
+    'JWT_AUTH_COOKIE': True,
 }
 
 ##############################################################################
