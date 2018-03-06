@@ -150,6 +150,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'common.apps.CommonConfig',
+    'comments.apps.CommentsConfig',
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
 )
@@ -694,3 +695,6 @@ WEB_URLS = {
     'email_confirm': '{root_url}/account-confirm-email/{key}/',
     'reset_password': '{root_url}/reset-password/?uid={uid}&token={token}/',
 }
+
+COMMENT_UPDATE_TIMEDELTA = datetime.timedelta(minutes=5)
+COMMENT_DELETE_TIMEDELTA = datetime.timedelta(minutes=10)
