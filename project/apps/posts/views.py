@@ -4,6 +4,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 
+from common.permissions import IsObjectOwner
 from posts.filters import (
     PostsSearchFilter,
     PostsOrderingFilter,
@@ -12,7 +13,6 @@ from posts.filters import (
 from posts.models import Post
 from posts.permissions import (
     PostDetailPermission,
-    IsPostOwner,
 )
 from posts.serializers import (
     PostListSerializer,
@@ -78,7 +78,7 @@ class PostUpdateApiView(generics.UpdateAPIView):
         'author', 'created', 'modified'
     ).select_related('author')
     http_method_names = ('patch', 'head', 'options')
-    permission_classes = (IsAuthenticated, IsPostOwner)
+    permission_classes = (IsAuthenticated, IsObjectOwner)
     serializer_class = PostSerializer
 
 
@@ -88,7 +88,7 @@ class PostDeleteApiView(generics.DestroyAPIView):
         'author', 'created', 'modified'
     ).select_related('author')
     http_method_names = ('delete', 'head', 'options')
-    permission_classes = (IsAuthenticated, IsPostOwner)
+    permission_classes = (IsAuthenticated, IsObjectOwner)
 
 
 post_list = PostListApiView.as_view()

@@ -4,6 +4,12 @@ from posts.models import Post
 from users.serializers import UserSimpleSerializer
 
 
+class PostSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('id', 'title',)
+
+
 class PostDetailsSerializer(serializers.ModelSerializer):
     author = UserSimpleSerializer()
     updated = serializers.ReadOnlyField(source='modified')
