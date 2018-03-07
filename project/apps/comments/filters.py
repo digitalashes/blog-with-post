@@ -11,12 +11,12 @@ from rest_framework.filters import (
 from posts.models import Post
 
 
-class PostsSearchFilter(SearchFilter):
+class CommentsSearchFilter(SearchFilter):
     pass
 
 
-class PostsOrderingFilter(OrderingFilter):
-    ordering_fields = ('id', 'title', 'author')
+class CommentsOrderingFilter(OrderingFilter):
+    ordering_fields = ('id', 'created', 'modified')
     ordering_description = _(
         f'Which field to use when ordering the results. Available values: {", ".join(ordering_fields)}'
     )

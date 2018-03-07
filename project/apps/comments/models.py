@@ -12,7 +12,7 @@ User = get_user_model()
 class Comment(TimeStampedModel):
     post = models.ForeignKey(
         to=Post, on_delete=CASCADE,
-        verbose_name=_('Post'), related_name='post_comments',
+        verbose_name=_('Post'), related_name='comments',
         help_text=_('Post.')
     )
     body = models.TextField(
@@ -21,7 +21,7 @@ class Comment(TimeStampedModel):
     )
     user = models.ForeignKey(
         to=User, on_delete=CASCADE,
-        verbose_name=_('User'), related_name='user_comments',
+        verbose_name=_('User'), related_name='comments',
         help_text=_('Comment Author.')
     )
     ip_address = models.GenericIPAddressField(

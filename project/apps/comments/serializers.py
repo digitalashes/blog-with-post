@@ -9,6 +9,12 @@ from posts.serializers import PostSimpleSerializer
 from users.serializers import UserSimpleSerializer
 
 
+class CommentSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'post_id', 'body', 'created', 'modified')
+
+
 class CommentDetailsSerializer(serializers.ModelSerializer):
     post = PostSimpleSerializer()
     user = UserSimpleSerializer()

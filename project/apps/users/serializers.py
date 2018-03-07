@@ -106,12 +106,24 @@ class UserSimpleSerializer(serializers.ModelSerializer):
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+    posts_total = serializers.SerializerMethodField()
+    comments_total = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ('id', 'username', 'email',
                   'first_name', 'last_name',
-                  'avatar_url', 'last_login')
+                  'avatar_url', 'last_login',
+                  'posts_total', 'comments_total')
         read_only_fields = ('id', 'avatar_url', 'last_login')
+
+    @staticmethod
+    def get_posts_total(obj):
+        return getattr(obj, 'posts_total', 0)
+
+    @staticmethod
+    def get_comments_total(obj):
+        return getattr(obj, 'comments_total', 0)
 
     def to_representation(self, instance):
         """

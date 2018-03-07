@@ -1,4 +1,5 @@
 from django.contrib.auth import logout as auth_logout, get_user_model
+from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 from rest_auth.registration.views import RegisterView as BaseRegisterView
 from rest_auth.registration.views import VerifyEmailView as BaseVerifyEmailView
@@ -18,6 +19,18 @@ from rest_framework_jwt.serializers import (
     jwt_encode_handler,
 )
 
+from comments.filters import (
+    CommentsSearchFilter,
+    CommentsOrderingFilter,
+)
+from comments.models import Comment
+from comments.serializers import CommentSimpleSerializer
+from posts.filters import (
+    PostsSearchFilter,
+    PostsOrderingFilter,
+)
+from posts.models import Post
+from posts.serializers import PostSimpleSerializer
 from users.filters import (
     UsersSearchFilter,
     UsersOrderingFilter,
@@ -150,7 +163,14 @@ class UserListApiView(generics.ListAPIView):
 
     """
 
-    queryset = User.objects.only('id', 'email', 'first_name', 'last_name', 'avatar')
+    queryset = User.objects.only(
+        'id', 'email', 'username',
+        'first_name', 'last_name',
+        'avatar', 'last_login',
+    ).annotate(
+        posts_total=Count('posts', distinct=True),
+        comments_total=Count('comments', distinct=True),
+    )
     http_method_names = ('get', 'head', 'options')
     filter_backends = (UsersSearchFilter, UsersOrderingFilter)
     search_fields = ('email', 'first_name', 'last_name')
@@ -164,7 +184,14 @@ class UserInfoApiView(generics.RetrieveAPIView):
 
     """
 
-    queryset = User.objects.only('id', 'email', 'first_name', 'last_name', 'avatar')
+    queryset = User.objects.only(
+        'id', 'email', 'username',
+        'first_name', 'last_name',
+        'avatar', 'last_login',
+    ).annotate(
+        posts_total=Count('posts', distinct=True),
+        comments_total=Count('comments', distinct=True),
+    )
     http_method_names = ('get', 'head', 'options')
     serializer_class = UserDetailsSerializer
     permission_classes = (AllowAny,)
@@ -185,6 +212,41 @@ class UserUpdateApiView(generics.UpdateAPIView):
         return self.request.user
 
 
+class UserPostsListView(generics.ListAPIView):
+    queryset = Post.objects.only('id', 'title', 'created', 'modified')
+    http_method_names = ('get', 'head', 'options')
+    permission_classes = (AllowAny,)
+    filter_backends = (PostsOrderingFilter, PostsSearchFilter)
+    search_fields = ('title', 'body')
+    serializer_class = PostSimpleSerializer
+
+    def get_queryset(self):
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {
+            'author_id': self.kwargs[lookup_url_kwarg],
+            'status': Post.PUBLISHED,
+        }
+        queryset = super().get_queryset().filter(**filter_kwargs)
+        return queryset
+
+
+class UserCommentsListView(generics.ListAPIView):
+    queryset = Comment.objects.only('id', 'post_id', 'body', 'created', 'modified')
+    http_method_names = ('get', 'head', 'options')
+    permission_classes = (AllowAny,)
+    filter_backends = (CommentsSearchFilter, CommentsOrderingFilter)
+    search_fields = ('body',)
+    serializer_class = CommentSimpleSerializer
+
+    def get_queryset(self):
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {
+            'user_id': self.kwargs[lookup_url_kwarg],
+        }
+        queryset = super().get_queryset().filter(**filter_kwargs)
+        return queryset
+
+
 registration = RegisterApiView.as_view()
 
 verify_email_resend = VerifyEmailResendApiView.as_view()
@@ -200,3 +262,6 @@ password_reset_confirm = PasswordResetConfirmView.as_view()
 user_list = UserListApiView.as_view()
 user_info = UserInfoApiView.as_view()
 user_update = UserUpdateApiView.as_view()
+
+user_posts = UserPostsListView.as_view()
+user_comments = UserCommentsListView.as_view()

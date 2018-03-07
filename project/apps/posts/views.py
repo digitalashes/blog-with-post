@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import generics
 from rest_framework.permissions import (
     AllowAny,
@@ -23,9 +24,12 @@ from posts.serializers import (
 class PostListApiView(generics.ListAPIView):
     queryset = Post.objects.only(
         'id', 'title', 'body', 'image',
-        'author', 'created', 'modified'
+        'status', 'allow_comments',
+        'author', 'created', 'modified',
     ).select_related('author').filter(
         status=Post.PUBLISHED
+    ).annotate(
+        comments_total=Count('comments')
     ).order_by('-created', 'author__username')
     http_method_names = ('get', 'head', 'options')
     serializer_class = PostListSerializer
