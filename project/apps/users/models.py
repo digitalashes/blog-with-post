@@ -14,10 +14,10 @@ from users.managers import UserManager
 
 
 def get_user_avatar_upload_path(instance, filename):
-    return os.path.join(*('users', str(instance.pk), filename))
+    return os.path.join(*('users', 'avatars', str(instance.pk), filename))
 
 
-class User(PermissionsMixin, AbstractBaseUser):
+class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     """
     Common user model.
 
