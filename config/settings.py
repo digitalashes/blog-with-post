@@ -544,22 +544,22 @@ JWT_AUTH = {
         'rest_framework_jwt.utils.jwt_response_payload_handler',
 
     'JWT_SECRET_KEY': env.str('JWT_SECRET_KEY'),
-    'JWT_GET_USER_SECRET_KEY': None,
-    'JWT_PUBLIC_KEY': None,
-    'JWT_PRIVATE_KEY': None,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_LEEWAY': 0,
-    'JWT_EXPIRATION_DELTA':
-        datetime.timedelta(seconds=env.int('JWT_EXPIRATION_DELTA')),
-    'JWT_AUDIENCE': None,
-    'JWT_ISSUER': None,
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA':
-        datetime.timedelta(seconds=env.int('JWT_REFRESH_EXPIRATION_DELTA')),
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
-    'JWT_AUTH_COOKIE': True,
+    # 'JWT_GET_USER_SECRET_KEY': None,
+    # 'JWT_PUBLIC_KEY': None,
+    # 'JWT_PRIVATE_KEY': None,
+    # 'JWT_ALGORITHM': 'HS256',
+    # 'JWT_VERIFY': True,
+    # 'JWT_VERIFY_EXPIRATION': True,
+    # 'JWT_LEEWAY': 0,
+    # 'JWT_EXPIRATION_DELTA':
+    #     datetime.timedelta(seconds=env.int('JWT_EXPIRATION_DELTA')),
+    # 'JWT_AUDIENCE': None,
+    # 'JWT_ISSUER': None,
+    # 'JWT_ALLOW_REFRESH': True,
+    # 'JWT_REFRESH_EXPIRATION_DELTA':
+    #     datetime.timedelta(seconds=env.int('JWT_REFRESH_EXPIRATION_DELTA')),
+    # 'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    # 'JWT_AUTH_COOKIE': True,
 }
 
 ##############################################################################
