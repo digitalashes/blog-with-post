@@ -10,14 +10,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import SoftDeletableModel
 
-from users.managers import UserManager, WithDeleteUserManager
+from users.managers import UserManager
 
 
 def get_user_avatar_upload_path(instance, filename):
     return os.path.join(*('users', str(instance.pk), filename))
 
 
-class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
+class User(PermissionsMixin, AbstractBaseUser):
     """
     Common user model.
 
@@ -71,7 +71,6 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     )
 
     objects = UserManager()
-    with_delete = WithDeleteUserManager()
 
     class Meta:
         verbose_name = _('User')
