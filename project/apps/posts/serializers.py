@@ -15,13 +15,19 @@ class PostSimpleSerializer(serializers.ModelSerializer):
 class PostDetailsSerializer(serializers.ModelSerializer):
     author = UserSimpleSerializer()
     updated = serializers.ReadOnlyField(source='modified')
+    comments_total = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ('id', 'title', 'body',
                   'image', 'author',
                   'status', 'allow_comments',
-                  'created', 'updated')
+                  'created', 'updated',
+                  'comments_total')
+
+    @staticmethod
+    def get_comments_total(obj):
+        return getattr(obj, 'comments_total', 0)
 
 
 class PostListSerializer(PostDetailsSerializer):
