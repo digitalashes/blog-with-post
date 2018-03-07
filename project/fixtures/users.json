@@ -3,19 +3,29 @@
         "model": "users.user",
         "pk": 1,
         "fields": {
-            "last_login": "2018-03-06T22:57:36.571Z",
+            "last_login": null,
             "is_superuser": true,
             "username": "admin",
             "email": "admin@example.com",
             "avatar": "",
             "password": "pbkdf2_sha256$100000$ZQCmgtPzClkM$Bwx8oDNm/f1ncNE8zeT5GOovx8Ev8Z03TPqGaexGl6o=",
-            "first_name": "",
-            "last_name": "",
+            "first_name": "John",
+            "last_name": "Doe",
             "date_joined": "2018-03-06T22:57:36.680Z",
             "is_active": true,
             "is_staff": true,
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "email": "admin@example.com",
+            "verified": true,
+            "primary": true
         }
     },
     {
@@ -38,6 +48,16 @@
         }
     },
     {
+        "model": "account.emailaddress",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "email": "whitewilliam@collins.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
         "model": "users.user",
         "pk": 3,
         "fields": {
@@ -54,6 +74,16 @@
             "is_staff": false,
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "email": "cookjoseph@yahoo.com",
+            "verified": true,
+            "primary": true
         }
     },
     {
@@ -76,6 +106,16 @@
         }
     },
     {
+        "model": "account.emailaddress",
+        "pk": 4,
+        "fields": {
+            "user": 4,
+            "email": "sanchezcalvin@hotmail.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
         "model": "users.user",
         "pk": 5,
         "fields": {
@@ -92,6 +132,16 @@
             "is_staff": false,
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 5,
+        "fields": {
+            "user": 5,
+            "email": "jacobhall@yahoo.com",
+            "verified": true,
+            "primary": true
         }
     },
     {
@@ -114,6 +164,16 @@
         }
     },
     {
+        "model": "account.emailaddress",
+        "pk": 6,
+        "fields": {
+            "user": 6,
+            "email": "sperez@acosta.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
         "model": "users.user",
         "pk": 7,
         "fields": {
@@ -130,6 +190,16 @@
             "is_staff": false,
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 7,
+        "fields": {
+            "user": 7,
+            "email": "hunteresparza@french-willis.com",
+            "verified": true,
+            "primary": true
         }
     },
     {
@@ -152,6 +222,16 @@
         }
     },
     {
+        "model": "account.emailaddress",
+        "pk": 8,
+        "fields": {
+            "user": 8,
+            "email": "amanda32@nichols.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
         "model": "users.user",
         "pk": 9,
         "fields": {
@@ -168,6 +248,16 @@
             "is_staff": false,
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 9,
+        "fields": {
+            "user": 9,
+            "email": "evanmayo@baker-duncan.com",
+            "verified": true,
+            "primary": true
         }
     },
     {
@@ -190,6 +280,16 @@
         }
     },
     {
+        "model": "account.emailaddress",
+        "pk": 10,
+        "fields": {
+            "user": 10,
+            "email": "amberhicks@jennings-walters.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
         "model": "users.user",
         "pk": 11,
         "fields": {
@@ -209,6 +309,16 @@
         }
     },
     {
+        "model": "account.emailaddress",
+        "pk": 11,
+        "fields": {
+            "user": 11,
+            "email": "michaelsutton@cook.info",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
         "model": "users.user",
         "pk": 12,
         "fields": {
@@ -225,6 +335,16 @@
             "is_staff": false,
             "groups": [],
             "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 12,
+        "fields": {
+            "user": 12,
+            "email": "omorris@hotmail.com",
+            "verified": true,
+            "primary": true
         }
     },
     {
@@ -248,122 +368,12 @@
     },
     {
         "model": "account.emailaddress",
-        "pk": 1,
-        "fields": {
-            "user": 1,
-            "email": "admin@example.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 2,
-        "fields": {
-            "user": 3,
-            "email": "cookjoseph@yahoo.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 3,
-        "fields": {
-            "user": 4,
-            "email": "sanchezcalvin@hotmail.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 4,
-        "fields": {
-            "user": 5,
-            "email": "jacobhall@yahoo.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 5,
-        "fields": {
-            "user": 6,
-            "email": "sperez@acosta.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 6,
-        "fields": {
-            "user": 7,
-            "email": "hunteresparza@french-willis.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 7,
-        "fields": {
-            "user": 8,
-            "email": "amanda32@nichols.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 8,
-        "fields": {
-            "user": 9,
-            "email": "evanmayo@baker-duncan.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 9,
-        "fields": {
-            "user": 10,
-            "email": "amberhicks@jennings-walters.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 10,
-        "fields": {
-            "user": 11,
-            "email": "michaelsutton@cook.info",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 11,
-        "fields": {
-            "user": 12,
-            "email": "omorris@hotmail.com",
-            "verified": true,
-            "primary": true
-        }
-    },
-    {
-        "model": "account.emailaddress",
-        "pk": 12,
+        "pk": 13,
         "fields": {
             "user": 13,
             "email": "fieldssarah@campbell.com",
-            "verified": true,
-            "primary": false
+            "verified": false,
+            "primary": true
         }
     }
 ]
