@@ -1,0 +1,369 @@
+[
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "last_login": "2018-03-06T22:57:36.571Z",
+            "is_superuser": true,
+            "username": "admin",
+            "email": "admin@example.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$ZQCmgtPzClkM$Bwx8oDNm/f1ncNE8zeT5GOovx8Ev8Z03TPqGaexGl6o=",
+            "first_name": "",
+            "last_name": "",
+            "date_joined": "2018-03-06T22:57:36.680Z",
+            "is_active": true,
+            "is_staff": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 2,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "ckelly",
+            "email": "whitewilliam@collins.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Elaine",
+            "last_name": "Leblanc",
+            "date_joined": "2018-03-06T22:58:21.832Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 3,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "justin23",
+            "email": "cookjoseph@yahoo.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "John",
+            "last_name": "Larson",
+            "date_joined": "2018-03-06T22:58:27.901Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 4,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "cynthiawoods",
+            "email": "sanchezcalvin@hotmail.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Cameron",
+            "last_name": "Barnes",
+            "date_joined": "2018-03-06T22:58:27.947Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 5,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "troywelch",
+            "email": "jacobhall@yahoo.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Jeremy",
+            "last_name": "Silva",
+            "date_joined": "2018-03-06T22:58:28.003Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 6,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "nanderson",
+            "email": "sperez@acosta.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Robert",
+            "last_name": "Morgan",
+            "date_joined": "2018-03-06T22:58:28.050Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 7,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "alyssalucas",
+            "email": "hunteresparza@french-willis.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "William",
+            "last_name": "Jordan",
+            "date_joined": "2018-03-06T22:58:28.097Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 8,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "jenniferallen",
+            "email": "amanda32@nichols.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "James",
+            "last_name": "Hall",
+            "date_joined": "2018-03-06T22:58:28.145Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 9,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "amarshall",
+            "email": "evanmayo@baker-duncan.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Nancy",
+            "last_name": "Duffy",
+            "date_joined": "2018-03-06T22:58:28.194Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 10,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "mitchelljuan",
+            "email": "amberhicks@jennings-walters.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Ricardo",
+            "last_name": "Jensen",
+            "date_joined": "2018-03-06T22:58:28.241Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 11,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "rodriguezroger",
+            "email": "michaelsutton@cook.info",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Alyssa",
+            "last_name": "Rodriguez",
+            "date_joined": "2018-03-06T22:58:28.289Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 12,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "mrivera",
+            "email": "omorris@hotmail.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Erik",
+            "last_name": "Ferguson",
+            "date_joined": "2018-03-06T22:58:28.335Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 13,
+        "fields": {
+            "last_login": null,
+            "is_superuser": false,
+            "username": "tatejulia",
+            "email": "fieldssarah@campbell.com",
+            "avatar": "",
+            "password": "pbkdf2_sha256$100000$1po91ghcr39K$QpnT9EU7oviZxKX2kEYFa+9R3s98mSF6oLuhBH2mK5o=",
+            "first_name": "Daniel",
+            "last_name": "Cantu",
+            "date_joined": "2018-03-06T22:58:28.382Z",
+            "is_active": true,
+            "is_staff": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "email": "admin@example.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 2,
+        "fields": {
+            "user": 3,
+            "email": "cookjoseph@yahoo.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 3,
+        "fields": {
+            "user": 4,
+            "email": "sanchezcalvin@hotmail.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 4,
+        "fields": {
+            "user": 5,
+            "email": "jacobhall@yahoo.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 5,
+        "fields": {
+            "user": 6,
+            "email": "sperez@acosta.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 6,
+        "fields": {
+            "user": 7,
+            "email": "hunteresparza@french-willis.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 7,
+        "fields": {
+            "user": 8,
+            "email": "amanda32@nichols.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 8,
+        "fields": {
+            "user": 9,
+            "email": "evanmayo@baker-duncan.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 9,
+        "fields": {
+            "user": 10,
+            "email": "amberhicks@jennings-walters.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 10,
+        "fields": {
+            "user": 11,
+            "email": "michaelsutton@cook.info",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 11,
+        "fields": {
+            "user": 12,
+            "email": "omorris@hotmail.com",
+            "verified": true,
+            "primary": true
+        }
+    },
+    {
+        "model": "account.emailaddress",
+        "pk": 12,
+        "fields": {
+            "user": 13,
+            "email": "fieldssarah@campbell.com",
+            "verified": true,
+            "primary": false
+        }
+    }
+]

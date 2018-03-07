@@ -126,7 +126,9 @@ CACHES = {
 
 ABSOLUTE_URL_OVERRIDES = {}
 
-FIXTURE_DIRS = []
+FIXTURE_DIRS = [
+    APPS_DIR.path('fixtures').root,
+]
 
 DJANGO_APPS = (
     'django.contrib.admin',
