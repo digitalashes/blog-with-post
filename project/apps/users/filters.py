@@ -10,7 +10,7 @@ class UsersSearchFilter(SearchFilter):
 
 
 class UsersOrderingFilter(OrderingFilter):
-    ordering_fields = ('id', 'username', 'email')
+    ordering_fields = ('id', 'username', 'first_name', 'last_name')
     ordering_description = _(
         f'Which field to use when ordering the results. Available values: {", ".join(ordering_fields)}'
     )

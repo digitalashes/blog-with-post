@@ -75,7 +75,7 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     class Meta:
         verbose_name = _('User')
         verbose_name_plural = _('Users')
-        ordering = ('last_name', 'first_name', 'email')
+        ordering = ('first_name', 'last_name', 'email')
         indexes = (
             models.Index(fields=['username', 'email',
                                  'last_name', 'first_name']),

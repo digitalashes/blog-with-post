@@ -17,7 +17,7 @@ User = get_user_model()
 
 
 def get_blog_image_upload_path(instance, filename):
-    return os.path.join(*('posts', str(instance.pk), filename))
+    return os.path.join(*('posts', 'images', str(instance.pk), filename))
 
 
 class Post(TimeStampedModel, StatusModel):
