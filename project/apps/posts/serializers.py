@@ -5,9 +5,11 @@ from users.serializers import UserSimpleSerializer
 
 
 class PostSimpleSerializer(serializers.ModelSerializer):
+    updated = serializers.ReadOnlyField(source='modified')
+
     class Meta:
         model = Post
-        fields = ('id', 'title',)
+        fields = ('id', 'title', 'created', 'updated')
 
 
 class PostDetailsSerializer(serializers.ModelSerializer):
