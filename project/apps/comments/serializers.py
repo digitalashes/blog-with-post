@@ -48,7 +48,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return attrs
 
     def to_representation(self, instance):
-        return CommentDetailsSerializer(instance).data
+        return CommentSimpleSerializer(instance).data
 
 
 class CommentUpdateSerializer(serializers.ModelSerializer):
