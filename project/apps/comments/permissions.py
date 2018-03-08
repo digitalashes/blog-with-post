@@ -13,4 +13,4 @@ class TimeDeltaPermission(BasePermission):
             return obj.modified > (now + time_delta)
         else:
             time_delta = settings.COMMENT_DELETE_TIMEDELTA
-            return obj.modified > (now + time_delta)
+            return obj.created > (now + time_delta)
