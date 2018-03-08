@@ -11,12 +11,22 @@ from common.permissions import IsObjectOwner
 
 
 class CommentCreateApiView(generics.CreateAPIView):
+    """
+    post: Create a new comment
+
+    """
+
     http_method_names = ('post', 'head', 'options')
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated,)
 
 
 class CommentUpdateApiView(generics.UpdateAPIView):
+    """
+    patch: Update comment body
+
+    """
+
     queryset = Comment.objects
     http_method_names = ('patch', 'head', 'options')
     serializer_class = CommentUpdateSerializer
@@ -24,6 +34,11 @@ class CommentUpdateApiView(generics.UpdateAPIView):
 
 
 class CommentDeleteApiView(generics.DestroyAPIView):
+    """
+    delete: Delete comment
+
+    """
+
     queryset = Comment.objects
     http_method_names = ('delete', 'head', 'options')
     serializer_class = CommentSerializer

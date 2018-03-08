@@ -49,3 +49,9 @@ class PostSerializer(PostDetailsSerializer):
             'author': self.context.get('request').user
         })
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        validated_data.update({
+            'body_markup_type': 'markdown',
+        })
+        return super().update(instance, validated_data)

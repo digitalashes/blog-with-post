@@ -10,6 +10,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import SoftDeletableModel
 
+from common.validators import ImageSizeValidator
 from users.managers import UserManager
 
 
@@ -43,7 +44,7 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
         help_text=_('User Email Address.')
     )
     avatar = models.ImageField(
-        _('Avatar'), width_field=250, height_field=250,
+        _('Avatar'), validators=[ImageSizeValidator(width=250, height=250)],
         upload_to=get_user_avatar_upload_path, blank=True, null=True,
         help_text=_('User Avatar.')
     )

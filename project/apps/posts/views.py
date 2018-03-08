@@ -22,6 +22,11 @@ from posts.serializers import (
 
 
 class PostListApiView(generics.ListAPIView):
+    """
+    get: Return list of posts
+
+    """
+
     queryset = Post.objects.only(
         'id', 'title', 'body', 'image',
         'status', 'allow_comments',
@@ -41,14 +46,21 @@ class PostListApiView(generics.ListAPIView):
     permission_classes = (AllowAny,)
 
 
-class MyPostListApiView(PostListApiView):
+class MyPostListApiView(generics.ListAPIView):
+    """
+    get: Return list of posts of authorized user
+
+    """
+
+    http_method_names = ('get', 'head', 'options')
     permission_classes = (IsAuthenticated,)
-    serializer_class = PostSerializer
+    serializer_class = PostListSerializer
     filter_backends = (
         MyPostsStatusFilter,
         PostsSearchFilter,
         PostsOrderingFilter,
     )
+    search_fields = ('title', 'body',)
     filter_fields = ('status',)
 
     def get_queryset(self):
@@ -60,12 +72,22 @@ class MyPostListApiView(PostListApiView):
 
 
 class PostCreateApiView(generics.CreateAPIView):
+    """
+    post: Create a new post
+
+    """
+
     http_method_names = ('post', 'head', 'options')
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
 
 
 class PostDetailApiView(generics.RetrieveAPIView):
+    """
+    patch: Get post info
+
+    """
+
     queryset = Post.objects.only(
         'id', 'title', 'body', 'image',
         'author', 'created', 'modified'
@@ -77,6 +99,11 @@ class PostDetailApiView(generics.RetrieveAPIView):
 
 
 class PostUpdateApiView(generics.UpdateAPIView):
+    """
+    patch: Update post data.
+
+    """
+
     queryset = Post.objects.only(
         'id', 'title', 'body', 'image',
         'author', 'created', 'modified'
@@ -87,6 +114,11 @@ class PostUpdateApiView(generics.UpdateAPIView):
 
 
 class PostDeleteApiView(generics.DestroyAPIView):
+    """
+    delete: Delete post
+
+    """
+
     queryset = Post.objects.only(
         'id', 'title', 'body', 'image',
         'author', 'created', 'modified'

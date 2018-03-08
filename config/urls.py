@@ -1,33 +1,33 @@
 from django.conf import settings
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
 from django.views.generic import RedirectView
 
 from config.api_docs import docs
 
 api_urlpatterns = [
-    path('', include('users.urls')),
-    path('', include('posts.urls')),
-    path('', include('comments.urls')),
+    url(r'^', include('users.urls')),
+    url(r'^', include('posts.urls')),
+    url(r'^', include('comments.urls')),
 ]
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/api/docs/'), name='index'),
-    path(settings.ADMIN_URL, admin.site.urls),
+    url(r'^$', RedirectView.as_view(url='/api/docs/'), name='index'),
+    url(settings.ADMIN_URL, admin.site.urls),
 
-    path('api/docs/', docs),
-    path('api/', include(arg=(api_urlpatterns, 'config'), namespace='api')),
+    url(r'api/docs/', docs),
+    url(r'api/', include(arg=(api_urlpatterns, 'config'), namespace='api')),
 ]
 
 if settings.USE_SILK:
     urlpatterns += [
-        path('silk/', 'silk.urls')
+        url(r'^silk/', 'silk.urls'),
     ]
 
 if settings.USE_DEBUG_TOOLBAR:
     urlpatterns += [
-        path('__debug__/', 'debug_toolbar.urls'),
+        url(r'^__debug__/', 'debug_toolbar.urls'),
     ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
