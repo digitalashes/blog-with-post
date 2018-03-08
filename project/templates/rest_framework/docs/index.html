@@ -1,4 +1,3 @@
-
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
@@ -64,29 +63,15 @@
 <script src="{% static 'rest_framework/docs/js/jquery.json-view.min.js' %}"></script>
 <script src="{% static 'rest_framework/docs/js/api.js' %}"></script>
 <script>
-  {%
-    if user.is_authenticated %}
-  var element = $('#auth-control');
-  window.auth = {
-    'type': 'session',
-  };
-  $('#selected-authentication').text('session');
-  element.children().removeClass('active');
-  element.find("[data-auth='session']").closest('li').addClass('active');
-  {%
-    endif %
-  }
-</script>
-
-{# fix sidebar collapse issue #}
-<script>
-  Array.from(
-    $('#menu-content > li > ul > li > a')
-  ).forEach(
-    el = > {
-    el.addEventListener('click', (e) = > {e.stopImmediatePropagation();
-  })
-  })
+  {% if user.is_authenticated %}
+    var element = $('#auth-control');
+    window.auth = {
+      'type': 'session'
+    };
+    $('#selected-authentication').text('session');
+    element.children().removeClass('active');
+    element.find("[data-auth='session']").closest('li').addClass('active');
+  {% endif %}
 </script>
 </body>
 </html>

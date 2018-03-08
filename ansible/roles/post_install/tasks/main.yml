@@ -26,15 +26,6 @@
   when: "postgis_install == true"
   tags: .env
 
-- name: Set DJANGO_DEBUG
-  lineinfile:
-    dest: "{{ django_settings_path }}/.env"
-    regexp: ^\s*DJANGO_DEBUG=False.*$
-    line: "DJANGO_DEBUG=True"
-    backrefs: yes
-  run_once: yes
-  tags: .env
-
 - name: Generate Secret Key For Django
   command: "{{ virtualenv_path }}/bin/python -c 'import secrets; print(secrets.token_urlsafe(50))'"
   register: dj_sk
