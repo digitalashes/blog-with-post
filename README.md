@@ -13,7 +13,7 @@
 
 1. ``git clone https://github.com/digitalashes/blog-with-post``
 1. ``cd blog-with-post``
-1. ``cp env.exapmle ./config/``
+1. ``cp env.example ./config/.env``
 1. open ./config/.env file
 1 find and replace `DJANGO_DATABASE_URL=postgres:///blog` to `DJANGO_DATABASE_URL=postgres://postgres:pg_pass@db:5432/postgres`
 1. ``docker-compose up``
