@@ -213,6 +213,11 @@ class UserUpdateApiView(generics.UpdateAPIView):
 
 
 class UserPostsListView(generics.ListAPIView):
+    """
+    get: Return list of user posts
+
+    """
+
     queryset = Post.objects.only('id', 'title', 'created', 'modified')
     http_method_names = ('get', 'head', 'options')
     permission_classes = (AllowAny,)
@@ -231,6 +236,11 @@ class UserPostsListView(generics.ListAPIView):
 
 
 class UserCommentsListView(generics.ListAPIView):
+    """
+    get: Return list of user comments
+
+    """
+
     queryset = Comment.objects.only('id', 'post_id', 'body', 'created', 'modified')
     http_method_names = ('get', 'head', 'options')
     permission_classes = (AllowAny,)
