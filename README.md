@@ -16,10 +16,14 @@
 1. ``cp env.example ./config/.env``
 1. open ./config/.env file
 1 find and replace `DJANGO_DATABASE_URL=postgres:///blog` to `DJANGO_DATABASE_URL=postgres://postgres:pg_pass@db:5432/postgres`
-1. ``docker-compose up``
+1. ``docker-compose up --build``
 1. open localhost:8000 in browser
 
-## 2. Credentials:
+## 2. Testing:
+
+For run tests, in docker or vagrant execute ``pytest``
+
+## 3. Credentials:
 
 * admin
     * url to admin panel - `http://localhost:8000/admin`
@@ -32,7 +36,7 @@
     * username = `tatejulia`
     * password = `password`
    
-## 3. The assignments:
+## 4. The assignments:
 
 #### First part
 
