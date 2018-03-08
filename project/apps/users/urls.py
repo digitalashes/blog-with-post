@@ -4,7 +4,7 @@ from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 from users import views
 
 urlpatterns = [
-    url(r'auth/', include([
+    url(r'^auth/', include([
         url(r'^registration/$', views.registration, name='registration', ),
 
         url(r'^verify_email_resend/$', views.verify_email_resend, name='verify_email_resend', ),
@@ -21,7 +21,7 @@ urlpatterns = [
         url(r'^password_reset_confirm/$', views.password_reset_confirm, name='password_reset_confirm'),
 
     ], namespace='auth')),
-    url('users/', include([
+    url('^users/', include([
         url(r'^user_list/$', views.user_list, name='user_list'),
         url(r'^user_info/(?P<pk>\d+)/$', views.user_info, name='user_info'),
         url(r'^user_update/$', views.user_update, name='user_update'),
