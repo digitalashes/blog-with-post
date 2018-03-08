@@ -227,3 +227,7 @@ venv.bak/
 ### Project
 project/media/
 project/staticfiles/
+
+
+### Pytest
+.pytest_cache/
