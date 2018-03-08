@@ -1,10 +1,13 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 from django.urls import reverse_lazy
 from freezegun import freeze_time
 from rest_auth.utils import jwt_encode
 from rest_framework import status
 
+from comments.models import Comment
+from posts.models import Post
 from users.serializers import UserDetailsSerializer
 from users.tests.factories import USER_DEFAULT_PASSWORD
 from users.tests.utils import find_values_in_mail_body
@@ -32,11 +35,23 @@ class UserViewsTestSuite:
         cls.password_reset_url = reverse_lazy('api:auth:password_reset')
         cls.password_reset_confirm_url = reverse_lazy('api:auth:password_reset_confirm')
 
+        cls.user_list_url = reverse_lazy('api:users:user_list')
+        cls.user_info_url = 'api:users:user_info'
+        cls.user_update_url = reverse_lazy('api:users:user_update')
+
+        cls.user_posts_url = 'api:users:user_posts'
+        cls.user_comments = 'api:users:user_comments'
+
+        cls.id_field = 'id'
         cls.username_field = 'username'
         cls.email_field = 'email'
         cls.password_field = 'password'
         cls.first_name_field = 'first_name'
         cls.last_name_field = 'last_name'
+        cls.avatar_url_field = 'avatar_url'
+        cls.last_login_field = 'last_login'
+        cls.posts_total_field = 'posts_total'
+        cls.comments_total_field = 'comments_total'
 
         cls.detail_field = 'detail'
         cls.non_field_errors_field = 'non_field_errors'
@@ -511,3 +526,136 @@ class UserViewsTestSuite:
         })
         response = client.post(self.login_url, data=payloads)
         assert response.status_code == status.HTTP_200_OK
+
+    def test_user_list_view(self, client):
+        for http_method in ('post', 'put', 'patch', 'delete'):
+            response = getattr(client, http_method)(self.user_list_url)
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+        response = client.get(self.user_list_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == User.objects.count()
+        assert len(response.data['results']) == User.objects.count()
+
+    def test_user_info_view(self, client):
+        test_url = reverse_lazy(self.user_info_url, args=(1,))
+        for http_method in ('post', 'put', 'patch', 'delete'):
+            response = getattr(client, http_method)(test_url)
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+        url = reverse_lazy(self.user_info_url, args=(100500,))
+
+        response = client.get(url)
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+        user = User.objects.annotate(
+            posts_total=Count('posts', distinct=True),
+            comments_total=Count('comments', distinct=True),
+        ).last()
+        url = reverse_lazy(self.user_info_url, args=(user.id,))
+
+        response = client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 8
+
+        assert self.id_field in response.data
+        assert self.username_field in response.data
+        assert self.first_name_field in response.data
+        assert self.last_name_field in response.data
+        assert self.avatar_url_field in response.data
+        assert self.last_login_field in response.data
+        assert self.posts_total_field in response.data
+        assert self.comments_total_field in response.data
+
+        assert response.data.get(self.id_field) == user.id
+        assert response.data.get(self.username_field) == user.username
+        assert response.data.get(self.first_name_field) == user.first_name
+        assert response.data.get(self.last_name_field) == user.last_name
+        assert response.data.get(self.avatar_url_field) == user.avatar_url
+        assert response.data.get(self.last_login_field) == user.last_login
+        assert response.data.get(self.posts_total_field) == user.posts_total
+        assert response.data.get(self.comments_total_field) == user.comments_total
+
+        client.force_authenticate(user)
+
+        response = client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 9
+
+        assert self.email_field in response.data
+        assert response.data.get(self.email_field) == user.email
+
+    def test_user_update_view(self, client, faker):
+        for http_method in ('get', 'post', 'put', 'patch', 'delete'):
+            response = getattr(client, http_method)(self.user_update_url)
+            assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+        user = User.objects.last()
+        client.force_authenticate(user)
+
+        for http_method in ('get', 'post', 'put', 'delete'):
+            response = getattr(client, http_method)(self.user_update_url)
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+        response = client.patch(self.user_update_url)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == UserDetailsSerializer(user).data
+
+        new_first_name = faker.first_name()
+        new_last_name = faker.last_name()
+
+        payloads = {
+            self.first_name_field: new_first_name,
+            self.last_name_field: new_last_name,
+        }
+
+        response = client.patch(self.user_update_url, data=payloads)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data.get(self.first_name_field) == new_first_name
+        assert response.data.get(self.last_name_field) == new_last_name
+
+    def test_user_posts_view(self, client):
+        test_url = reverse_lazy(self.user_posts_url, args=(1,))
+        for http_method in ('post', 'put', 'patch', 'delete'):
+            response = getattr(client, http_method)(test_url)
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+        url = reverse_lazy(self.user_posts_url, args=(100500,))
+        response = client.get(url)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 0
+        assert not response.data['results']
+
+        user = User.objects.last()
+        posts_count = Post.objects.filter(author=user, status=Post.PUBLISHED).count()
+
+        url = reverse_lazy(self.user_posts_url, args=(user.id,))
+        response = client.get(url)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['results']
+        assert len(response.data['results']) == posts_count
+
+    def test_user_comments_view(self, client):
+        test_url = reverse_lazy(self.user_comments, args=(1,))
+        for http_method in ('post', 'put', 'patch', 'delete'):
+            response = getattr(client, http_method)(test_url)
+            assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+        url = reverse_lazy(self.user_comments, args=(100500,))
+        response = client.get(url)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 0
+        assert not response.data['results']
+
+        user = User.objects.last()
+        comments_count = Comment.objects.filter(user=user).count()
+
+        url = reverse_lazy(self.user_comments, args=(user.id,))
+        response = client.get(url)
+
+        assert response.status_code == status.HTTP_200_OK
+        response.data['count'] = comments_count
+        assert response.data['results']
