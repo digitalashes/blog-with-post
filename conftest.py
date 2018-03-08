@@ -84,4 +84,4 @@ def django_db_setup(django_db_setup, django_db_blocker):
     """
 
     with django_db_blocker.unblock():
-        call_command('load_fake_data')
+        call_command('load_fake_data', call_from_test=True)

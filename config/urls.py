@@ -17,7 +17,7 @@ urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
 
     url(r'^api/docs/', docs),
-    url(r'^api/', include(arg=(api_urlpatterns, 'config'), namespace='api')),
+    url(r'^api/', include(api_urlpatterns, namespace='api')),
 ]
 
 if settings.USE_SILK:
@@ -26,8 +26,10 @@ if settings.USE_SILK:
     ]
 
 if settings.USE_DEBUG_TOOLBAR:
+    import debug_toolbar
+
     urlpatterns += [
-        url(r'^__debug__/', 'debug_toolbar.urls'),
+        url(r'^__debug__/', include(debug_toolbar.urls)),
     ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
