@@ -43,7 +43,7 @@
 - name: Set DJANGO_SECRET_KEY
   lineinfile:
     dest: "{{ django_settings_path }}/.env"
-    regexp: ^\s*DJANGO_SECRET_KEY=.*$
+    regexp: ^\s*#DJANGO_SECRET_KEY=.*$
     line: "DJANGO_SECRET_KEY={{ dj_sk.stdout }}"
     backrefs: yes
   run_once: yes
@@ -57,7 +57,7 @@
 - name: Set JWT_SECRET_KEY
   lineinfile:
     dest: "{{ django_settings_path }}/.env"
-    regexp: ^\s*JWT_SECRET_KEY=.*$
+    regexp: ^\s*#JWT_SECRET_KEY=.*$
     line: "JWT_SECRET_KEY={{ jwt_sk.stdout }}"
     backrefs: yes
   run_once: yes
