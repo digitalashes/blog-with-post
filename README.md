@@ -1,23 +1,38 @@
-# Status
+## 1. Install
 
-Under development.
+### Using Vagrant:
 
-## 1. Install requirements
+1. ``git clone https://github.com/digitalashes/blog-with-post``
+1. ``cd blog-with-post``
+1. ``vagrant up``
+1. ``vagrant ssh``
+1. ``./manage.py runserver 0.0.0.0:8000``
+1. open localhost:8000 in browser
 
-Local requirements:
+### Using Docker:
 
-    pip install -r requirements/local.txt
+1. ``git clone https://github.com/digitalashes/blog-with-post``
+1. ``cd blog-with-post``
+1. ``cp env.exapmle ./config/``
+1. open ./config/.env file
+1 find and replace `DJANGO_DATABASE_URL=postgres:///blog` to `DJANGO_DATABASE_URL=postgres://postgres:pg_pass@db:5432/postgres`
+1. ``docker-compose up``
+1. open localhost:8000 in browser
 
-Production requirements:
+## 2. Credentials:
 
-    pip install -r requirements/production.txt
-
-## 2. Django Management commands
-
-* ``./manage.py migrate``
-* ``./manage.py createsuperuser``
-
-### 3. The assignments:
+* admin
+    * url to admin panel - `http://localhost:8000/admin`
+    * username = `admin`
+    * password = `admin`
+* user with verified email
+    * username = `ckelly`
+    * password = `password`
+* user with unverified email:
+    * username = `tatejulia`
+    * password = `password`
+   
+## 3. The assignments:
 
 #### First part
 
