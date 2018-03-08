@@ -80,3 +80,7 @@ class Post(TimeStampedModel, StatusModel):
     @property
     def is_published(self):
         return self.status == self.PUBLISHED
+
+    @property
+    def user_id(self):
+        return self.author_id
