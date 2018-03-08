@@ -1,6 +1,7 @@
 import os
 
 from allauth.utils import build_absolute_uri
+from common.validators import ImageSizeValidator
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -9,8 +10,6 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import SoftDeletableModel
-
-from common.validators import ImageSizeValidator
 from users.managers import UserManager
 
 
@@ -98,6 +97,10 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
     def get_full_name(self):
         full_name = f'{self.first_name} {self.last_name}'
         return full_name.strip()
+
+    @property
+    def get_short_name(self):
+        return self.first_name
 
     def set_random_password(self, commit=True, length=8):
         password = User.objects.make_random_password(length=length)
