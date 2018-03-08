@@ -16,8 +16,8 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/api/docs/'), name='index'),
     url(settings.ADMIN_URL, admin.site.urls),
 
-    url(r'api/docs/', docs),
-    url(r'api/', include(arg=(api_urlpatterns, 'config'), namespace='api')),
+    url(r'^api/docs/', docs),
+    url(r'^api/', include(arg=(api_urlpatterns, 'config'), namespace='api')),
 ]
 
 if settings.USE_SILK:
