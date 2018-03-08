@@ -13,6 +13,8 @@ from model_utils.models import (
     StatusModel,
 )
 
+from common.validators import ImageSizeValidator
+
 User = get_user_model()
 
 
@@ -38,7 +40,7 @@ class Post(TimeStampedModel, StatusModel):
         help_text=_('Post Body.')
     )
     image = models.ImageField(
-        _('Image'), width_field=1024, height_field=1024,
+        _('Image'), validators=[ImageSizeValidator(width=1024, height=1024)],
         upload_to=get_blog_image_upload_path, blank=True, null=True,
         help_text=_('Post Head Image.')
     )
