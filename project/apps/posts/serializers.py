@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from comments.serializers import CommentDetailsSerializer
 from posts.models import Post
 from users.serializers import UserSimpleSerializer
 
@@ -16,6 +17,7 @@ class PostDetailsSerializer(serializers.ModelSerializer):
     author = UserSimpleSerializer()
     updated = serializers.ReadOnlyField(source='modified')
     comments_total = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -23,11 +25,15 @@ class PostDetailsSerializer(serializers.ModelSerializer):
                   'image', 'author',
                   'status', 'allow_comments',
                   'created', 'updated',
-                  'comments_total')
+                  'comments_total', 'comments')
 
     @staticmethod
     def get_comments_total(obj):
         return getattr(obj, 'comments_total', 0)
+
+    @staticmethod
+    def get_comments(obj):
+        return CommentDetailsSerializer(obj.comments.all(), many=True).data
 
 
 class PostListSerializer(PostDetailsSerializer):
@@ -36,6 +42,7 @@ class PostListSerializer(PostDetailsSerializer):
         super().__init__(*args, **kwargs)
         self.fields.pop('body', None)
         self.fields.pop('image', None)
+        self.fields.pop('comments', None)
 
 
 class PostSerializer(PostDetailsSerializer):

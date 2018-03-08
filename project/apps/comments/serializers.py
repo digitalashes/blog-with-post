@@ -5,7 +5,6 @@ from rest_framework.generics import get_object_or_404
 from comments.models import Comment
 from common.utils import get_client_ip
 from posts.models import Post
-from posts.serializers import PostSimpleSerializer
 from users.serializers import UserSimpleSerializer
 
 
@@ -16,12 +15,11 @@ class CommentSimpleSerializer(serializers.ModelSerializer):
 
 
 class CommentDetailsSerializer(serializers.ModelSerializer):
-    post = PostSimpleSerializer()
     user = UserSimpleSerializer()
 
     class Meta:
         model = Comment
-        exclude = ('ip_address',)
+        fields = ('id', 'user', 'body', 'created', 'modified')
 
 
 class CommentSerializer(serializers.ModelSerializer):

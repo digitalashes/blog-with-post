@@ -88,10 +88,14 @@ class PostDetailApiView(generics.RetrieveAPIView):
 
     """
 
-    queryset = Post.objects.only(
-        'id', 'title', 'body', 'image',
-        'author', 'created', 'modified'
-    ).select_related('author')
+    queryset = Post.objects.select_related(
+        'author',
+    ).prefetch_related(
+        'comments',
+        'comments__user',
+    ).annotate(
+        comments_total=Count('comments'),
+    )
     http_method_names = ('get', 'head', 'options')
     permission_classes = (AllowAny, PostDetailPermission)
     serializer_class = PostSerializer
