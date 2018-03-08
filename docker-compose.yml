@@ -17,4 +17,3 @@ services:
   db:
     image: postgres
     container_name: blog_with_post_db_container
-    env_file: ./config/.env
