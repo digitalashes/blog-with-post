@@ -86,6 +86,12 @@ class LoginSerializer(LoginSerializerBase):
 class PasswordResetSerializer(PasswordResetSerializerBase):
     password_reset_form_class = PasswordResetForm
 
+    def validate_email(self, email):
+        email = super().validate_email(email)
+        if email and not email_address_exists(email):
+            raise serializers.ValidationError(_('A user with this e-mail address is not registered.'))
+        return email
+
     def get_email_options(self):
         tpl = 'account/email/%s'
         return {
