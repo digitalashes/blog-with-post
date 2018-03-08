@@ -111,5 +111,5 @@ class User(PermissionsMixin, AbstractBaseUser, SoftDeletableModel):
 
     @property
     def avatar_url(self):
-        url = self.avatar.url if self.avatar else static('/images/default_user_avatar.png')
+        url = self.avatar.url if self.avatar else static('/images/user_default_avatar.png')
         return build_absolute_uri(None, url)
