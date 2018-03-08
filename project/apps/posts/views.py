@@ -41,14 +41,16 @@ class PostListApiView(generics.ListAPIView):
     permission_classes = (AllowAny,)
 
 
-class MyPostListApiView(PostListApiView):
+class MyPostListApiView(generics.ListAPIView):
+    http_method_names = ('get', 'head', 'options')
     permission_classes = (IsAuthenticated,)
-    serializer_class = PostSerializer
+    serializer_class = PostListSerializer
     filter_backends = (
         MyPostsStatusFilter,
         PostsSearchFilter,
         PostsOrderingFilter,
     )
+    search_fields = ('title', 'body',)
     filter_fields = ('status',)
 
     def get_queryset(self):
