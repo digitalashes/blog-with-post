@@ -83,8 +83,8 @@ class UserAdmin(AuthUserAdmin):
             'fields': (
                 'username', 'email',
                 'first_name', 'last_name',
-                'avatar',
-                'password', 'last_login', 'date_joined'
+                'avatar', 'password',
+                'last_login', 'date_joined'
             )
         }),
         (_('Permissions'), {

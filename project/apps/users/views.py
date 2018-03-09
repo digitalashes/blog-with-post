@@ -38,7 +38,7 @@ from users.filters import (
 from users.serializers import (
     VerifyEmailResendSerializer,
     UserDetailsSerializer,
-    UserUpdateSerializer,
+    UserSerializer,
 )
 
 User = get_user_model()
@@ -206,7 +206,7 @@ class UserUpdateApiView(generics.UpdateAPIView):
 
     http_method_names = ('patch', 'head', 'options')
     permission_classes = (IsAuthenticated,)
-    serializer_class = UserUpdateSerializer
+    serializer_class = UserSerializer
 
     def get_object(self):
         return self.request.user
