@@ -77,7 +77,7 @@ class VerifyEmailResendSerializer(serializers.Serializer):
 class LoginSerializer(LoginSerializerBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields.pop('email')
+        self.fields.pop('email', None)
         self.fields['username'].required = True
         self.fields['username'].help_text = _('Username.')
         self.fields['password'].help_text = _('Password.')
@@ -149,7 +149,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         return representation
 
 
-class UserUpdateSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'avatar',
